@@ -8,7 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 //table users
-export const users = pgTable('users', {
+export const USERS = pgTable('users', {
     id: serial('id').primaryKey(),
     email: varchar('email', { length: 255 }).notNull().unique(),
     name: varchar('name', { length: 100 }),
@@ -16,7 +16,7 @@ export const users = pgTable('users', {
 });
 
 // table tasks
-export const tasks = pgTable('tasks', {
+export const TASKS = pgTable('tasks', {
     id: serial('id').primaryKey(),
     title: varchar('title', { length: 255 }).notNull(),
     description: text(),
@@ -24,6 +24,6 @@ export const tasks = pgTable('tasks', {
     priority: integer('priority').default(1),
     userId: integer('userId')
         .notNull()
-        .references(() => users.id, { onDelete: 'cascade' }),
+        .references(() => USERS.id, { onDelete: 'cascade' }),
     createdAt: timestamp('createdAt').defaultNow(),
 });

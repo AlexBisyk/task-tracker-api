@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "ts-node-dev ./src/server.ts",
         "db:push": "drizzle-kit push --config ./src/db/drizzle.config.ts"
     },
     "keywords": [],
@@ -21,6 +21,7 @@
         "@types/pg": "^8.15.4",
         "drizzle-kit": "^0.31.1",
         "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
         "typescript": "^5.8.3"
     }
 }
