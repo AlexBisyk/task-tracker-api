@@ -1,10 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { db } from '../db/client'; // модуль з підключенням до бази
-import { TASKS } from '../db/schema'; // схема Drizzle
-import type { TaskCreateBody } from '../interfaces/task.interface'; // типи
+import type {
+    TaskCreateBody,
+    TaskUpdateBody,
+} from '../interfaces/task.interface'; // типи
 import {
     getAllTasksService,
     createTaskService,
+    updateTaskService,
 } from '../services/task-services';
 
 export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
@@ -36,6 +38,40 @@ export const createTask = async (
         return rep.code(500).send({
             status: 'error',
             message: 'Failed to create task',
+        });
+    }
+};
+
+export const updateTask = async (
+    req: FastifyRequest<{ Params: { id: string }; Body: TaskUpdateBody }>,
+    rep: FastifyReply
+) => {
+    try {
+        const task = req.body;
+        const numId = Number(req.params.id);
+        if (isNaN(numId)) {
+            return rep.code(400).send({
+                status: 'error',
+                message: 'Invalid task ID',
+            });
+        }
+        const updTask = await updateTaskService(numId, task);
+        if (updTask.length === 0) {
+            return rep.code(404).send({
+                status: 'error',
+                message: 'Task not found',
+            });
+        }
+        return rep.code(200).send({
+            status: 'success',
+            message: 'Task updated',
+            data: updTask[0],
+        });
+    } catch (error) {
+        console.error('Insert error:', error);
+        return rep.code(500).send({
+            status: 'error',
+            message: 'Failed to update task',
         });
     }
 };

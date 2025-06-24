@@ -19,3 +19,24 @@ export const createTaskSchema = {
         },
     },
 };
+
+export const updateTaskSchema = {
+    body: {
+        type: 'object',
+        properties: {
+            title: { type: 'string' },
+            description: { type: 'string' },
+            priority: { type: 'number' },
+            userId: { type: 'number' },
+        },
+    },
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                status: { type: 'string' },
+                message: { type: 'string' },
+            },
+        },
+    },
+};
