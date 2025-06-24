@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import fastify from 'fastify';
-import { tasksRoutes } from './routes/tasksRoutes';
-import { userRoutes } from './routes/usersRoutes';
+import tasksRoutes from './routes/tasksRoutes';
+import userRoutes from './routes/usersRoutes';
 
 const app = fastify();
 

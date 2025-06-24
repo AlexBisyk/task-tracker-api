@@ -22,9 +22,16 @@ export const createUser = async (
     try {
         const user = req.body as UserCreateBody;
         const returnedUser = await db.insert(USERS).values(user).returning();
-        rep.code(201).send(returnedUser);
+        return rep.code(201).send({
+            status: 'success',
+            message: 'User created',
+            data: returnedUser,
+        });
     } catch (error) {
         console.error('Insert error:', error);
-        return rep.code(500).send({ error: 'Failed to insert users' });
+        return rep.code(500).send({
+            status: 'error',
+            message: 'Failed to create user',
+        });
     }
 };

@@ -19,9 +19,16 @@ export const createTask = async (
     try {
         const taskReq = req.body as TaskCreateBody;
         const returnedTask = await db.insert(TASKS).values(taskReq).returning();
-        return rep.status(201).send(returnedTask);
+        return rep.code(201).send({
+            status: 'success',
+            message: 'Task created',
+            data: returnedTask,
+        });
     } catch (error) {
         console.error('Insert error:', error);
-        return rep.code(500).send({ error: 'Failed to insert tasks' });
+        return rep.code(500).send({
+            status: 'error',
+            message: 'Failed to create task',
+        });
     }
 };
