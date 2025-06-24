@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import type {
     TaskCreateBody,
     TaskUpdateBody,
-} from '../interfaces/task.interface'; // типи
+} from '../interfaces/task.interface';
 import {
     getAllTasksService,
     createTaskService,
@@ -56,7 +56,7 @@ export const updateTask = async (
             });
         }
         const updTask = await updateTaskService(numId, task);
-        if (updTask.length === 0) {
+        if (!updTask) {
             return rep.code(404).send({
                 status: 'error',
                 message: 'Task not found',
@@ -65,7 +65,7 @@ export const updateTask = async (
         return rep.code(200).send({
             status: 'success',
             message: 'Task updated',
-            data: updTask[0],
+            data: updTask,
         });
     } catch (error) {
         console.error('Insert error:', error);

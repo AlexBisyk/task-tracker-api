@@ -19,7 +19,7 @@ export const updateTaskService = async (
     taskId: number,
     taskData: TaskUpdateBody
 ) => {
-    const updatedTask = await db
+    const [updatedTask] = await db
         .update(TASKS)
         .set(taskData)
         .where(eq(TASKS.id, taskId))
