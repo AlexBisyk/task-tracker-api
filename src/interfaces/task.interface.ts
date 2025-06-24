@@ -4,3 +4,9 @@ export interface TaskCreateBody {
     priority?: number;
     userId: number;
 }
+export interface TaskUpdateBody {
+    title?: string;
+    description?: string;
+    status?: string;
+    priority?: number;
+}

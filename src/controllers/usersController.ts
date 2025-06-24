@@ -1,17 +1,17 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { db } from '../db/client';
-import { USERS } from '../db/schema';
 import { UserCreateBody } from '../interfaces/user.interface';
+import {
+    getAllUsersService,
+    createUserService,
+} from '../services/user-services';
 
 export const getAllUsers = async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-        const allUsers = await db.select().from(USERS);
-        rep.send(allUsers);
+        const users = await getAllUsersService();
+        rep.send(users);
     } catch (error) {
-        console.error('DB error, cannot select all users:', error);
-        return rep
-            .status(500)
-            .send({ error: 'DB error, cannot select all users' });
+        console.error('DB query error:', error);
+        return rep.code(500).send({ error: 'Failed to fetch users' });
     }
 };
 
@@ -20,12 +20,11 @@ export const createUser = async (
     rep: FastifyReply
 ) => {
     try {
-        const user = req.body as UserCreateBody;
-        const returnedUser = await db.insert(USERS).values(user).returning();
+        const user = createUserService(req.body);
         return rep.code(201).send({
             status: 'success',
             message: 'User created',
-            data: returnedUser,
+            data: user,
         });
     } catch (error) {
         console.error('Insert error:', error);
