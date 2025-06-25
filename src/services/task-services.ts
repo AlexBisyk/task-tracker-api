@@ -27,7 +27,7 @@ export const updateTaskService = async (
     return updatedTask;
 };
 
-export const getSingleUserService = async (taskId: string) => {
+export const getSingleTaskService = async (taskId: string) => {
     const numId = Number(taskId);
     const [task] = await db.select().from(TASKS).where(eq(TASKS.id, numId));
     return task;

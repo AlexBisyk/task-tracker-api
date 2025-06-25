@@ -7,7 +7,7 @@ import {
     getAllTasksService,
     createTaskService,
     updateTaskService,
-    getSingleUserService,
+    getSingleTaskService,
 } from '../services/task-services';
 
 export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
@@ -29,7 +29,7 @@ export const getSingleTask = async (
 ) => {
     try {
         const taskId = req.params.id;
-        const task = await getSingleUserService(taskId);
+        const task = await getSingleTaskService(taskId);
         if (!task) {
             return rep.code(404).send({
                 status: 'failed',
