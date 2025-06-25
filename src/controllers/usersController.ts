@@ -15,6 +15,25 @@ export const getAllUsers = async (req: FastifyRequest, rep: FastifyReply) => {
         return rep.code(500).send({ error: 'Failed to fetch users' });
     }
 };
+export const getSingleUser = async (
+    req: FastifyRequest<{ Params: { id: string } }>,
+    rep: FastifyReply
+) => {
+    try {
+        const userId = req.params.id;
+        const user = await getSingleUserService(userId);
+        if (!user) {
+            return rep.code(404).send({
+                status: 'failed',
+                message: 'No user with such id',
+            });
+        }
+        rep.send(user);
+    } catch (error) {
+        console.error('DB query error:', error);
+        return rep.code(500).send({ error: 'Failed to fetch user' });
+    }
+};
 
 export const createUser = async (
     req: FastifyRequest<{ Body: UserCreateBody }>,
@@ -33,19 +52,5 @@ export const createUser = async (
             status: 'error',
             message: 'Failed to create user',
         });
-    }
-};
-
-export const getSingleUser = async (
-    req: FastifyRequest<{ Params: { id: string } }>,
-    rep: FastifyReply
-) => {
-    try {
-        const userId = req.params.id;
-        const user = await getSingleUserService(userId);
-        rep.send(user);
-    } catch (error) {
-        console.error('DB query error:', error);
-        return rep.code(500).send({ error: 'Failed to fetch user' });
     }
 };
