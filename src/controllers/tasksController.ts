@@ -9,6 +9,7 @@ import {
     updateTaskService,
     getSingleTaskService,
 } from '../services/task-services';
+import { errorReply, successReply } from '../utils/replies';
 
 export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
     try {
@@ -16,10 +17,7 @@ export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
         rep.send(tasksRes);
     } catch (error) {
         console.error('DB query error:', error);
-        return rep.code(500).send({
-            status: 'error',
-            message: 'Failed to fetch tasks',
-        });
+        return errorReply(rep, 500, 'Failed to fetch tasks');
     }
 };
 
@@ -31,18 +29,12 @@ export const getSingleTask = async (
         const taskId = req.params.id;
         const task = await getSingleTaskService(taskId);
         if (!task) {
-            return rep.code(404).send({
-                status: 'failed',
-                message: 'No task with such id',
-            });
+            return errorReply(rep, 404, 'No task with such id');
         }
         rep.send(task);
     } catch (error) {
         console.error('DB query error:', error);
-        return rep.code(500).send({
-            status: 'error',
-            message: 'Failed to fetch task',
-        });
+        return errorReply(rep, 500, 'Failed to fetch task');
     }
 };
 export const createTask = async (
@@ -51,17 +43,10 @@ export const createTask = async (
 ) => {
     try {
         const task = await createTaskService(req.body);
-        return rep.code(201).send({
-            status: 'success',
-            message: 'Task created',
-            data: task,
-        });
+        return successReply(rep, 201, 'Task created', task);
     } catch (error) {
         console.error('Insert error:', error);
-        return rep.code(500).send({
-            status: 'error',
-            message: 'Failed to create task',
-        });
+        errorReply(rep, 500, 'Failed to create task');
     }
 };
 
@@ -73,28 +58,15 @@ export const updateTask = async (
         const task = req.body;
         const numId = Number(req.params.id);
         if (isNaN(numId)) {
-            return rep.code(400).send({
-                status: 'error',
-                message: 'Invalid task ID',
-            });
+            return errorReply(rep, 400, 'Invalid task ID');
         }
         const updTask = await updateTaskService(numId, task);
         if (!updTask) {
-            return rep.code(404).send({
-                status: 'error',
-                message: 'Task not found',
-            });
+            return errorReply(rep, 404, 'Task not found');
         }
-        return rep.code(200).send({
-            status: 'success',
-            message: 'Task updated',
-            data: updTask,
-        });
+        return successReply(rep, 200, 'Task updated', updTask);
     } catch (error) {
         console.error('Insert error:', error);
-        return rep.code(500).send({
-            status: 'error',
-            message: 'Failed to update task',
-        });
+        errorReply(rep, 500, 'Failed to update task');
     }
 };

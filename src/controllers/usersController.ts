@@ -5,6 +5,7 @@ import {
     createUserService,
     getSingleUserService,
 } from '../services/user-services';
+import { errorReply, successReply } from '../utils/replies';
 
 export const getAllUsers = async (req: FastifyRequest, rep: FastifyReply) => {
     try {
@@ -12,7 +13,7 @@ export const getAllUsers = async (req: FastifyRequest, rep: FastifyReply) => {
         rep.send(users);
     } catch (error) {
         console.error('DB query error:', error);
-        return rep.code(500).send({ error: 'Failed to fetch users' });
+        return errorReply(rep, 500, 'Failed to fetch users');
     }
 };
 export const getSingleUser = async (
@@ -23,15 +24,12 @@ export const getSingleUser = async (
         const userId = req.params.id;
         const user = await getSingleUserService(userId);
         if (!user) {
-            return rep.code(404).send({
-                status: 'failed',
-                message: 'No user with such id',
-            });
+            return errorReply(rep, 404, 'No user with such id');
         }
         rep.send(user);
     } catch (error) {
         console.error('DB query error:', error);
-        return rep.code(500).send({ error: 'Failed to fetch user' });
+        return errorReply(rep, 500, 'Failed to fetch user');
     }
 };
 
@@ -41,16 +39,9 @@ export const createUser = async (
 ) => {
     try {
         const user = createUserService(req.body);
-        return rep.code(201).send({
-            status: 'success',
-            message: 'User created',
-            data: user,
-        });
+        return successReply(rep, 201, 'User created', user);
     } catch (error) {
         console.error('Insert error:', error);
-        return rep.code(500).send({
-            status: 'error',
-            message: 'Failed to create user',
-        });
+        return errorReply(rep, 500, 'Failed to create user');
     }
 };
