@@ -4,6 +4,7 @@ import {
     createTask,
     updateTask,
     getSingleTask,
+    deleteSingleTask,
 } from '../controllers/tasksController';
 import { createTaskSchema, updateTaskSchema } from '../schemas/task-schema';
 
@@ -15,4 +16,5 @@ export default async function tasksRoutes(fastify: FastifyInstance) {
         schema: updateTaskSchema,
         handler: updateTask,
     });
+    fastify.delete('/tasks/:id', deleteSingleTask);
 }

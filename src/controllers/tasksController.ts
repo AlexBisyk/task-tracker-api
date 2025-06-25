@@ -8,6 +8,7 @@ import {
     createTaskService,
     updateTaskService,
     getSingleTaskService,
+    deleteSingleTaskService,
 } from '../services/task-services';
 import { errorReply, successReply } from '../utils/replies';
 
@@ -68,5 +69,22 @@ export const updateTask = async (
     } catch (error) {
         console.error('Insert error:', error);
         errorReply(rep, 500, 'Failed to update task');
+    }
+};
+
+export const deleteSingleTask = async (
+    req: FastifyRequest<{ Params: { id: string } }>,
+    rep: FastifyReply
+) => {
+    try {
+        const taskId = req.params.id;
+        const delTask = await deleteSingleTaskService(taskId);
+        if (!delTask) {
+            return errorReply(rep, 404, 'No task with such id');
+        }
+        return successReply(rep, 200, 'Task deleted', delTask);
+    } catch (error) {
+        console.error('Delete error:', error);
+        return errorReply(rep, 500, 'Failed to delete task');
     }
 };

@@ -32,3 +32,12 @@ export const getSingleTaskService = async (taskId: string) => {
     const [task] = await db.select().from(TASKS).where(eq(TASKS.id, numId));
     return task;
 };
+
+export const deleteSingleTaskService = async (taskId: string) => {
+    const numId = Number(taskId);
+    const [task] = await db
+        .delete(TASKS)
+        .where(eq(TASKS.id, numId))
+        .returning();
+    return task;
+};
