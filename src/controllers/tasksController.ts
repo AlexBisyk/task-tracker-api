@@ -7,6 +7,7 @@ import {
     getAllTasksService,
     createTaskService,
     updateTaskService,
+    getSingleUserService,
 } from '../services/task-services';
 
 export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
@@ -22,6 +23,28 @@ export const getAllTasks = async (req: FastifyRequest, rep: FastifyReply) => {
     }
 };
 
+export const getSingleTask = async (
+    req: FastifyRequest<{ Params: { id: string } }>,
+    rep: FastifyReply
+) => {
+    try {
+        const taskId = req.params.id;
+        const task = await getSingleUserService(taskId);
+        if (!task) {
+            return rep.code(404).send({
+                status: 'failed',
+                message: 'No task with such id',
+            });
+        }
+        rep.send(task);
+    } catch (error) {
+        console.error('DB query error:', error);
+        return rep.code(500).send({
+            status: 'error',
+            message: 'Failed to fetch task',
+        });
+    }
+};
 export const createTask = async (
     req: FastifyRequest<{ Body: TaskCreateBody }>,
     rep: FastifyReply

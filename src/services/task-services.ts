@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../db/client';
-import { TASKS } from '../db/schema';
+import { TASKS, USERS } from '../db/schema';
 import type {
     TaskCreateBody,
     TaskUpdateBody,
@@ -25,4 +25,10 @@ export const updateTaskService = async (
         .where(eq(TASKS.id, taskId))
         .returning();
     return updatedTask;
+};
+
+export const getSingleUserService = async (taskId: string) => {
+    const numId = Number(taskId);
+    const [task] = await db.select().from(TASKS).where(eq(TASKS.id, numId));
+    return task;
 };
