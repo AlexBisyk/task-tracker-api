@@ -15,7 +15,21 @@ export const createTaskSchema = {
             properties: {
                 status: { type: 'string' },
                 message: { type: 'string' },
+                data: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'number' },
+                        title: { type: 'string' },
+                        description: { type: 'string' },
+                        status: { type: 'string' },
+                        priority: { type: 'number' },
+                        userId: { type: 'number' },
+                        createdAt: { type: 'string', format: 'date-time' },
+                    },
+                    required: ['id', 'title', 'userId', 'createdAt'],
+                },
             },
+            required: ['status', 'message', 'data'],
         },
     },
 };
