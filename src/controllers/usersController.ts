@@ -21,7 +21,10 @@ export const getSingleUser = async (
     rep: FastifyReply
 ) => {
     try {
-        const userId = req.params.id;
+        const userId = Number(req.params.id);
+        if (isNaN(userId)) {
+            return errorReply(rep, 400, 'Invalid user ID');
+        }
         const user = await getSingleUserService(userId);
         if (!user) {
             return errorReply(rep, 404, 'No user with such id');

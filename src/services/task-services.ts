@@ -27,17 +27,15 @@ export const updateTaskService = async (
     return updatedTask;
 };
 
-export const getSingleTaskService = async (taskId: string) => {
-    const numId = Number(taskId);
-    const [task] = await db.select().from(TASKS).where(eq(TASKS.id, numId));
+export const getSingleTaskService = async (taskId: number) => {
+    const [task] = await db.select().from(TASKS).where(eq(TASKS.id, taskId));
     return task;
 };
 
-export const deleteSingleTaskService = async (taskId: string) => {
-    const numId = Number(taskId);
+export const deleteSingleTaskService = async (taskId: number) => {
     const [task] = await db
         .delete(TASKS)
-        .where(eq(TASKS.id, numId))
+        .where(eq(TASKS.id, taskId))
         .returning();
     return task;
 };

@@ -12,8 +12,7 @@ export const createUserService = async (userData: UserCreateBody) => {
     return user;
 };
 
-export const getSingleUserService = async (id: string) => {
-    const userId = Number(id);
+export const getSingleUserService = async (userId: number) => {
     const [user] = await db.select().from(USERS).where(eq(USERS.id, userId));
     return user;
 };

@@ -27,7 +27,10 @@ export const getSingleTask = async (
     rep: FastifyReply
 ) => {
     try {
-        const taskId = req.params.id;
+        const taskId = Number(req.params.id);
+        if (isNaN(taskId)) {
+            return errorReply(rep, 400, 'Invalid task ID');
+        }
         const task = await getSingleTaskService(taskId);
         if (!task) {
             return errorReply(rep, 404, 'No task with such id');
@@ -57,11 +60,11 @@ export const updateTask = async (
 ) => {
     try {
         const task = req.body;
-        const numId = Number(req.params.id);
-        if (isNaN(numId)) {
+        const taskId = Number(req.params.id);
+        if (isNaN(taskId)) {
             return errorReply(rep, 400, 'Invalid task ID');
         }
-        const updTask = await updateTaskService(numId, task);
+        const updTask = await updateTaskService(taskId, task);
         if (!updTask) {
             return errorReply(rep, 404, 'Task not found');
         }
@@ -77,7 +80,10 @@ export const deleteSingleTask = async (
     rep: FastifyReply
 ) => {
     try {
-        const taskId = req.params.id;
+        const taskId = Number(req.params.id);
+        if (isNaN(taskId)) {
+            return errorReply(rep, 400, 'Invalid task ID');
+        }
         const delTask = await deleteSingleTaskService(taskId);
         if (!delTask) {
             return errorReply(rep, 404, 'No task with such id');
